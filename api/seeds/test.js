@@ -9,8 +9,8 @@ exports.seed = async function (knex) {
   // Deletes ALL existing entries
   await knex("test").del();
   await knex("test").insert([
-    { colName: "Payton" },
-    { colName: "Josh" },
-    { colName: "ChatGPT" },
+    { name: "Payton" },
+    { name: "Josh" },
+    { name: "ChatGPT" },
   ]);
 };

@@ -1,7 +1,9 @@
 # Specify the node base image with your desired version, e.g. node:<version>
-FROM node:alpine
+FROM node:22
 
-ARG POSTGRES_USER
+# ARG POSTGRES_USER
+
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 # Set and create the working directory for this app
 WORKDIR /api

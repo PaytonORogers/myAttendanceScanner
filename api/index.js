@@ -2,12 +2,9 @@ const express = require("express");
 
 const app = express();
 const port = 8080;
-const cors = require("cors");
-
-app.use(cors());
 
 const knex = require("knex")(
-  require("./knexfile.js")[process.env.NODE_ENV || "development"]
+  require("./knexfile.js")["development"]
 );
 
 app.get("/", (req, res) => {
