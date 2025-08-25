@@ -23,10 +23,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-    return knex.schema.alterTable('instructor_login', table => {
-        table.dropForeign('instructor_edipi')
-    })
-        .then(function () {
-            return knex.schema.dropTableIfExists('instructor_login');
-        });
+    return knex.schema.dropTableIfExists('instructor_login');
 };
