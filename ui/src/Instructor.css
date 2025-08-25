@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+
+/* //.sidebar {
+      width: 30%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding-right: 20px;
+    } */
+      /* .selected-item {
+      width: 70%;
+      overflow-y: auto;   
+      padding-left: 20px;
+      color: rgb(255, 255, 255);
+    } */
+
+    /* th, td {
+        text-align: center;
+        border: 1px solid rbg(black);
+    }
+    th[scope="colu"] {
+    background-color: #1a5586;
+    color: rgb(255, 255, 255);
+    column-gap: 27px;
+    border: 1px solid rbg(rgb(0, 0, 0));
+    }
+    th[scope="col"] {
+    background-color: #468b43;
+    color: white;
+    column-gap: 27px;
+    border: 1px solid rbg(black);
+    }
+    td[scope="rows"] {
+        background-color: #9542da;
+        border: 1px solid rbg(black);
+    }
+    td[scope="row"] {
+        background-color: #245542;
+        border: 1px solid rbg(black);
+    } */
