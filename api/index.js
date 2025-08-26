@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 })
 
 // Get all instructors
-app.get('/instructor_login', (req, res) => {
+app.get('/instructors', (req, res) => {
   knex
   .select('*')
   .from('instructor_login')
@@ -27,7 +27,7 @@ app.get('/instructor_login', (req, res) => {
 });
 
 // Get a single instructor by dodid
-app.get('/instructor_login/:dodid', (req, res) => {
+app.get('/instructors/edipi/:dodid', (req, res) => {
   knex
   .select('*')
   .from('instructor_login')
@@ -85,8 +85,9 @@ app.get('/classes/:id', (req, res) => {
 })
 
 
-app.get('/instructor_login/:username', (req, res) => {
+app.get('/instructors/username/:username', (req, res) => {
   let queriedUsername = req.params.username
+  console.log(queriedUsername)
   if (queriedUsername){
     knex
     .select('*')
