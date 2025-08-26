@@ -11,15 +11,15 @@ function App() {
 
   return (
     <>
-      {/* <div>
+      <div>
         <Login />
-      </div> */}
+      </div>
       {/* <div>
         <Instructor />
       </div> */}
-      <div>
+      {/* <div>
         <Attendance />
-      </div>
+      </div> */}
     </>
   )
 }
