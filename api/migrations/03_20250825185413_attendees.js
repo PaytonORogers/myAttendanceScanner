@@ -6,7 +6,7 @@ const { table } = require("../db");
  */
 exports.up = function(knex) {
     return knex.schema.createTable('attendees', table => {
-        table.increments('attendees_edipi').primary();
+        table.string('attendees_edipi').primary();
         table.string('email').notNullable();
         table.string('phone_number').nullable();
         table.string('first_name').notNullable();
