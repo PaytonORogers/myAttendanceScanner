@@ -54,7 +54,7 @@ function Instructor() {
             </tr>
             <tr className="hover:bg-violet-600 text-center border">
                 <td scope="rows" className="border">TCCC</td>
-                <td scope="row" classNAme="border">17/20</td>
+                <td scope="row" className="border">17/20</td>
             </tr>
         </table>
         <button/>
