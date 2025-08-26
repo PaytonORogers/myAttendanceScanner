@@ -16,7 +16,6 @@ function ClassInfo() {
     return (
         
     <>
-    {console.log(classInfo)}
     {classInfo && 
     <h1>{classInfo[0].class_title}</h1>
     }
