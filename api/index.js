@@ -4,7 +4,9 @@ const app = express();
 const port = 8080;
 const cors = require("cors");
 
+
 app.use(cors());
+app.use(express.json());
 
 const knex = require("knex")(
   require("./knexfile.js")[process.env.NODE_ENV || "development"]
@@ -82,23 +84,61 @@ app.get('/classes/:id', (req, res) => {
   .catch(err => res.status(404).send(err))
 })
 
-// app.post('/instructor_login', (req, res) => {
-//   if (
-//     Object.hasOwn(req.body, 'edipi') &&
-//     Object.hasOwn(req.body, 'username') &&
-//     Object.hasOwn(req.body, 'hashed_password') &&
-//     Object.hasOwn(req.body, 'email') &&
-//     Object.hasOwn(req.body, 'first_name') &&
-//     Object.hasOwn(req.body, 'middle_initial') &&
-//     Object.hasOwn(req.body, 'last_name') &&
-//     Object.hasOwn(req.body, 'date_of_birth') &&
-//     Object.hasOwn(req.body, 'branch') &&
-//     Object.hasOwn(req.body, '') &&
-//   )
 
-//   knex('instructor_login')
-//   .insert(req.body)
-// })
+app.get('/instructor_login/:username', (req, res) => {
+  let queriedUsername = req.params.username
+  if (queriedUsername){
+    knex
+    .select('*')
+    .from('instructor_login')
+    .where('instructor_login.username', '=', `${queriedUsername}`)
+    .then((info) => res.status(200).send(info))
+  }
+  else{
+    res.status(400).send('You must supply a username in the body of the request')
+  }
+})
+
+// Must send with body of full instructor object. Example:
+// {
+//     "edipi": 53241,
+//     "username": "hurlingkirbiez69",
+//     "hashed_password": "password2",
+//     "email": "kirby@mail.com",
+//     "first_name": "bill",
+//     "middle_initial": "f",
+//     "last_name": "kirby",
+//     "date_of_birth": "1990-09-16",
+//     "branch": "ARRRRRMMMY",
+//     "rank": "E6",
+//     "card_expiration": "20260101"
+// }
+app.post('/instructor_login', (req, res) => {
+  let addedInstructor = req.body
+  console.log(addedInstructor)
+  if ( addedInstructor &&
+    Object.hasOwn(req.body, 'edipi') &&
+    Object.hasOwn(req.body, 'username') &&
+    Object.hasOwn(req.body, 'hashed_password') &&
+    Object.hasOwn(req.body, 'email') &&
+    Object.hasOwn(req.body, 'first_name') &&
+    Object.hasOwn(req.body, 'middle_initial') &&
+    Object.hasOwn(req.body, 'last_name') &&
+    Object.hasOwn(req.body, 'date_of_birth') &&
+    Object.hasOwn(req.body, 'branch') &&
+    Object.hasOwn(req.body, 'rank') &&
+    Object.hasOwn(req.body, 'card_expiration')
+  )
+
+  {
+    knex('instructor_login')
+    .insert(addedInstructor, ['edipi', 'rank', 'first_name', 'last_name'])
+    .then((info) => res.status(200).send(info))
+  }
+  else{
+    res.status(400).send('Missing required properties')
+  }
+})
 
 // Get a all classes per dodid of attendee
 // app.get('/classes/:dodid', (req, res) => {
