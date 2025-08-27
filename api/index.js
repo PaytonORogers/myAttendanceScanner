@@ -20,82 +20,82 @@ app.get('/', (req, res) => {
 // Get all instructors
 app.get('/instructors', (req, res) => {
   knex
-  .select('*')
-  .from('instructor_login')
-  .then((data) => res.status(200).send(data))
-  .catch((err) => res.status(400).send(err))
+    .select('*')
+    .from('instructor_login')
+    .then((data) => res.status(200).send(data))
+    .catch((err) => res.status(400).send(err))
 });
 
 // Get a single instructor by dodid
 app.get('/instructors/edipi/:dodid', (req, res) => {
   knex
-  .select('*')
-  .from('instructor_login')
-  .where('instructor_login.edipi', '=', `${req.params.dodid}`)
-  .then((instructor) => {
-    if (instructor) {
-      res.status(200).send(instructor)
-    }
-    else {
-      res.status(404).send(`No instructor found with EDIPI of ${req.params.dodid}`)
-    }
-  })
-  .catch((err) => {
-    if (err){
-      res.status(404).send(err)
-    }
-  })
+    .select('*')
+    .from('instructor_login')
+    .where('instructor_login.edipi', '=', `${req.params.dodid}`)
+    .then((instructor) => {
+      if (instructor) {
+        res.status(200).send(instructor)
+      }
+      else {
+        res.status(404).send(`No instructor found with EDIPI of ${req.params.dodid}`)
+      }
+    })
+    .catch((err) => {
+      if (err) {
+        res.status(404).send(err)
+      }
+    })
 })
 
 // Get all attendees
 app.get('/attendees', (req, res) => {
   knex
-  .select('*')
-  .from('attendees')
-  .then(attendees => res.status(200).send(attendees))
-  .catch(err => res.status(404).send(err))
+    .select('*')
+    .from('attendees')
+    .then(attendees => res.status(200).send(attendees))
+    .catch(err => res.status(404).send(err))
 })
 
 // Get a single attendee by dodid
 app.get('/attendees/:dodid', (req, res) => {
   knex
-  .select('*')
-  .from('attendees')
-  .where('attendees.attendees_edipi', '=', `${req.params.dodid}`)
-  .then(attendees => res.status(200).send(attendees))
-  .catch(err => res.status(404).send(err))
+    .select('*')
+    .from('attendees')
+    .where('attendees.attendees_edipi', '=', `${req.params.dodid}`)
+    .then(attendees => res.status(200).send(attendees))
+    .catch(err => res.status(404).send(err))
 })
 
 // Get all classes
 app.get('/classes', (req, res) => {
   knex
-  .select('*')
-  .from('classes')
-  .then(classes => res.status(200).send(classes))
-  .catch(err => res.status(404).send(err))
+    .select('*')
+    .from('classes')
+    .then(classes => res.status(200).send(classes))
+    .catch(err => res.status(404).send(err))
 })
 
 app.get('/classes/:id', (req, res) => {
   knex
-  .select('*')
-  .from('classes')
-  .where('class_id', '=', `${req.params.id}`)
-  .then(classes => res.status(200).send(classes))
-  .catch(err => res.status(404).send(err))
+    .select('*')
+    .from('classes')
+    .where('class_id', '=', `${req.params.id}`)
+    .then(classes => res.status(200).send(classes))
+    .catch(err => res.status(404).send(err))
 })
 
 
 app.get('/instructors/username/:username', (req, res) => {
   let queriedUsername = req.params.username
   console.log(queriedUsername)
-  if (queriedUsername){
+  if (queriedUsername) {
     knex
-    .select('*')
-    .from('instructor_login')
-    .where('instructor_login.username', '=', `${queriedUsername}`)
-    .then((info) => res.status(200).send(info))
+      .select('*')
+      .from('instructor_login')
+      .where('instructor_login.username', '=', `${queriedUsername}`)
+      .then((info) => res.status(200).send(info))
   }
-  else{
+  else {
     res.status(400).send('You must supply a username in the body of the request')
   }
 })
@@ -114,15 +114,26 @@ app.get('/instructors/username/:username', (req, res) => {
 //     "rank": "E6",
 //     "card_expiration": "20260101"
 // }
-app.post('/instructor_login', (req, res) => {
+app.post('/instructor_login', async (req, res) => {
   let addedInstructor = req.body
-  console.log(addedInstructor)
-  if ( addedInstructor && Object.hasOwn(req.body, 'username') && Object.hasOwn(req.body, 'hashed_password')) {
+  
+
+
+
+  const existingUser = await knex.select('*').from('instructor_login').where('username', '=', addedInstructor.username);
+console.log(existingUser)
+
+  if (addedInstructor && Object.hasOwn(addedInstructor, 'username') && Object.hasOwn(addedInstructor, 'hashed_password')) {
     // ADD CHECK FOR IF INSTRUCTOR ALREADY HAS LOGIN
     // SHOULD PROMPT FOR ACCOUNT RESET OR PASSWORD RESET OR SOMETHING I DUNNO
+
+    if (existingUser[0]) {
+      return res.status(409).send("User already exists");
+    }
+
     knex('instructor_login')
-    .insert(addedInstructor, [ 'username', 'hashed_password'])
-    .then((info) => res.status(200).send(info))
+      .insert(addedInstructor, ['username', 'hashed_password'])
+      .then((info) => res.status(200).send(info))
   } else {
     res.status(400).send('Missing required properties')
   }
