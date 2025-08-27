@@ -1,9 +1,11 @@
 import './Instructor.css';
+import { useEffect, useState } from 'react'
+
 
 function Instructor() {
-  const [ classes, setClasses ] = useState([]);
-  
-  
+  const [classes, setClasses] = useState([]);
+
+
 
   return (
     <div className="flex flex-row h-screen">
@@ -44,22 +46,26 @@ function Instructor() {
             <input type="checkbox" name="Email" value="Email" /> Email
           </li>
         </ul>
-        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name"/>
+        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" />
       </div>
       <div className="flex flex-col border bg-white dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-25 mb-25 ml-5 mr-25 w-400 h-auto">
         <h1 className="font-bold">Previous Attendance Sheets</h1>
         <br></br>
         <table className="border">
+          <thead>
             <tr>
-                <th scope="colu">Previous Courses</th>
-                <th scope="col">Class Attendance</th>
+              <th scope="colu">Previous Courses</th>
+              <th scope="col">Class Attendance</th>
             </tr>
+          </thead>
+          <tbody>
             <tr className="hover:bg-violet-600 text-center border">
-                <td scope="rows" className="border">TCCC</td>
-                <td scope="row" className="border">17/20</td>
+              <td scope="rows" className="border">TCCC</td>
+              <td scope="row" className="border">17/20</td>
             </tr>
+          </tbody>
         </table>
-        <button/>
+        <button />
       </div>
     </div>
   )

@@ -14,20 +14,8 @@ function Login() {
       } else {
         setHashedPassword(hash)
       }
-      //  return knex.schema.createTable('instructor_login', table => {
-      // table.integer('edipi').primary().notNullable();
-      // table.string('username').notNullable();
-      // table.string('hashed_password').notNullable();
-      // table.string('email').notNullable();
-      // table.string('first_name').notNullable();
-      // table.string('middle_initial').notNullable();
-      // table.string('last_name').notNullable();
-      // table.string('date_of_birth').notNullable();
-      // table.string('branch').notNullable();
-      // table.string('rank').notNullable();
-      // table.string('card_expiration').notNullable();
-      const instructorToAdd = { edipi, username, password: hash, email, first_name, middle_intial, last_name, date_of_birth, branch, rank, card_expiration };
-      fetch("http://localhost:8080", {
+      const instructorToAdd = { 'username': username, 'hashed_password': hash };
+      fetch("http://localhost:8080/instructor_login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(instructorToAdd)
@@ -57,7 +45,7 @@ function Login() {
     if (!username || !password) {
       alert("Please enter username and password");
     }
-    fetch(`http://localhost:8080/${username}`)
+    fetch(`http://localhost:8080/instructors/username/${username}`)
       .then(res => {
         if (!res.ok) {
           throw new Error("Username not found");
@@ -66,37 +54,22 @@ function Login() {
         }
       })
       .then(instructor => {
-        // We need to check the username and password against the DB here
-        // something like
-        // is username in db
-        // does salted password match username's password
-        // if not present an error
-        bcrypt.hash(password, 12, function (err, hash) {
+        console.log(instructor)
+        // hashedPassword needs to be an API call to DB for username's hashedpassword
+        bcrypt.compare(password, hashedPassword, function (err, result) {
           if (err) {
-            console.log(err)
+            console.error("Error comparing passwords:", err);
           } else {
-            // hashedPassword needs to be an API call to DB for username's hashedpassword
-            // API CALL HERE
-            fetch(`http://localhost:8080/${username}/${instructor.hashedPassword}`)
-              .then(res => {
-                if (!res.ok) {
-                  throw new Error("Password incorrect");
-                } else {
-                  bcrypt.compare(password, hashedPassword, function (err, result) {
-                    if (err) {
-                      console.error("Error comparing passwords:", err);
-                    } else {
-                      console.log("Password match:", result);
-                      //if result true push user to the instructor page
-                      //ADD ROUTING HERE
-                    };
-                  });
-                }
-              });
-            return
+            console.log("Password match:", result);
+            if (!result) {
+              alert("Incorrect Password!")
+            } else {
+              //ADD ROUTING HERE
+            }
           }
-        })
-      })
+        });
+      });
+    return
   }
   return (
     <>

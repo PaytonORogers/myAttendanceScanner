@@ -117,26 +117,13 @@ app.get('/instructors/username/:username', (req, res) => {
 app.post('/instructor_login', (req, res) => {
   let addedInstructor = req.body
   console.log(addedInstructor)
-  if ( addedInstructor &&
-    Object.hasOwn(req.body, 'edipi') &&
-    Object.hasOwn(req.body, 'username') &&
-    Object.hasOwn(req.body, 'hashed_password') &&
-    Object.hasOwn(req.body, 'email') &&
-    Object.hasOwn(req.body, 'first_name') &&
-    Object.hasOwn(req.body, 'middle_initial') &&
-    Object.hasOwn(req.body, 'last_name') &&
-    Object.hasOwn(req.body, 'date_of_birth') &&
-    Object.hasOwn(req.body, 'branch') &&
-    Object.hasOwn(req.body, 'rank') &&
-    Object.hasOwn(req.body, 'card_expiration')
-  )
-
-  {
+  if ( addedInstructor && Object.hasOwn(req.body, 'username') && Object.hasOwn(req.body, 'hashed_password')) {
+    // ADD CHECK FOR IF INSTRUCTOR ALREADY HAS LOGIN
+    // SHOULD PROMPT FOR ACCOUNT RESET OR PASSWORD RESET OR SOMETHING I DUNNO
     knex('instructor_login')
-    .insert(addedInstructor, ['edipi', 'rank', 'first_name', 'last_name'])
+    .insert(addedInstructor, [ 'username', 'hashed_password'])
     .then((info) => res.status(200).send(info))
-  }
-  else{
+  } else {
     res.status(400).send('Missing required properties')
   }
 })
