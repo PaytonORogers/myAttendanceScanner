@@ -17,17 +17,6 @@ function App() {
 
   return (
     <>
-<<<<<<< HEAD
-      <div>
-        <Login />
-      </div>
-      {/* <div>
-        <Instructor />
-      </div> */}
-      {/* <div>
-        <Attendance />
-      </div> */}
-=======
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/create" element={<ClassCreate />} />
@@ -38,7 +27,6 @@ function App() {
 
 
       </Routes>
->>>>>>> main
     </>
   )
 }

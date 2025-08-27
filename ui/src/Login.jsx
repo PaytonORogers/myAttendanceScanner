@@ -14,31 +14,31 @@ function Login() {
       } else {
         setHashedPassword(hash)
       }
-        //  return knex.schema.createTable('instructor_login', table => {
-        // table.integer('edipi').primary().notNullable();
-        // table.string('username').notNullable();
-        // table.string('hashed_password').notNullable();
-        // table.string('email').notNullable();
-        // table.string('first_name').notNullable();
-        // table.string('middle_initial').notNullable();
-        // table.string('last_name').notNullable();
-        // table.string('date_of_birth').notNullable();
-        // table.string('branch').notNullable();
-        // table.string('rank').notNullable();
-        // table.string('card_expiration').notNullable();
-    const instructorToAdd = { edipi, username, password: hash, email, first_name, middle_intial, last_name, date_of_birth, branch, rank, card_expiration };
+      //  return knex.schema.createTable('instructor_login', table => {
+      // table.integer('edipi').primary().notNullable();
+      // table.string('username').notNullable();
+      // table.string('hashed_password').notNullable();
+      // table.string('email').notNullable();
+      // table.string('first_name').notNullable();
+      // table.string('middle_initial').notNullable();
+      // table.string('last_name').notNullable();
+      // table.string('date_of_birth').notNullable();
+      // table.string('branch').notNullable();
+      // table.string('rank').notNullable();
+      // table.string('card_expiration').notNullable();
+      const instructorToAdd = { edipi, username, password: hash, email, first_name, middle_intial, last_name, date_of_birth, branch, rank, card_expiration };
       fetch("http://localhost:8080", {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(instructorToAdd)
       })
         .then(res => {
-          if(!res.ok) {
+          if (!res.ok) {
             return res.json().then(errorData => {
               throw new Error(errorData.message);
             });
           } else {
-          return res.json();
+            return res.json();
           }
         })
         .then(data => {
@@ -62,42 +62,42 @@ function Login() {
         if (!res.ok) {
           throw new Error("Username not found");
         } else {
-        return res.json();
+          return res.json();
         }
       })
       .then(instructor => {
-    // We need to check the username and password against the DB here
-    // something like
-    // is username in db
-    // does salted password match username's password
-    // if not present an error
-    bcrypt.hash(password, 12, function (err, hash) {
-      if (err) {
-        console.log(err)
-      } else {
-        // hashedPassword needs to be an API call to DB for username's hashedpassword
-        // API CALL HERE
-        fetch(`http://localhost:8080/${username}/${instructor.hashedPassword}`)
-         .then(res => {
-          if(!res.ok) {
-            throw new Error("Password incorrect");
-          } else {
-        bcrypt.compare(password, hashedPassword, function (err, result) {
+        // We need to check the username and password against the DB here
+        // something like
+        // is username in db
+        // does salted password match username's password
+        // if not present an error
+        bcrypt.hash(password, 12, function (err, hash) {
           if (err) {
-            console.error("Error comparing passwords:", err);
+            console.log(err)
           } else {
-            console.log("Password match:", result);
-            //if result true push user to the instructor page
-            //ADD ROUTING HERE
-          };
-        });
-      }
-    });
-    return
-  }
-    })
+            // hashedPassword needs to be an API call to DB for username's hashedpassword
+            // API CALL HERE
+            fetch(`http://localhost:8080/${username}/${instructor.hashedPassword}`)
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error("Password incorrect");
+                } else {
+                  bcrypt.compare(password, hashedPassword, function (err, result) {
+                    if (err) {
+                      console.error("Error comparing passwords:", err);
+                    } else {
+                      console.log("Password match:", result);
+                      //if result true push user to the instructor page
+                      //ADD ROUTING HERE
+                    };
+                  });
+                }
+              });
+            return
+          }
+        })
       })
-    }
+  }
   return (
     <>
       <div className="login-header flex justify-self-center gap-50 text-align-center mt-25">
