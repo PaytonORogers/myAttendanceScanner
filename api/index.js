@@ -84,6 +84,43 @@ app.get('/classes/:id', (req, res) => {
     .catch(err => res.status(404).send(err))
 })
 
+app.get('/classes/instructor/:instructor_username', (req, res) => {
+  knex
+  .select('*')
+  .from('classes')
+  .where('instructor_username', '=', `${req.params.instructor_username}`)
+  .then((data) => {
+    console.log(data)
+    if (data.length === 0){
+      res.status(404).send(`No classes found for ${req.params.instructor_username}`)
+    }
+    else{
+      res.status(200).send(data)
+    }
+  })
+  .catch(err => res.status(500).send(err))
+})
+
+app.post('/classes', (req, res) => {
+  let newClass = req.body;
+  let dateToAdd;
+
+  if (!Object.hasOwn(newClass, "class_title")){
+    res.status(400).send("Must provide class_title property")
+  }
+  if (!Object.hasOwn(newClass, "instructor_username")){
+    res.status(400).send("Must provide instructor_username property")
+  }
+  if (!Object.hasOwn(newClass, "date")){
+    newClass.date = new Date()
+  }
+
+  knex('classes')
+  .insert(newClass, ['class_title'])
+  .then((data) => res.status(200).send(data))
+
+})
+
 
 app.get('/instructors/username/:username', (req, res) => {
   let queriedUsername = req.params.username
@@ -116,7 +153,7 @@ app.get('/instructors/username/:username', (req, res) => {
 // }
 app.post('/instructor_login', async (req, res) => {
   let addedInstructor = req.body
-  
+
 
 
 
