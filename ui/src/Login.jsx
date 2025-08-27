@@ -14,6 +14,37 @@ function Login() {
       } else {
         setHashedPassword(hash)
       }
+        //  return knex.schema.createTable('instructor_login', table => {
+        // table.integer('edipi').primary().notNullable();
+        // table.string('username').notNullable();
+        // table.string('hashed_password').notNullable();
+        // table.string('email').notNullable();
+        // table.string('first_name').notNullable();
+        // table.string('middle_initial').notNullable();
+        // table.string('last_name').notNullable();
+        // table.string('date_of_birth').notNullable();
+        // table.string('branch').notNullable();
+        // table.string('rank').notNullable();
+        // table.string('card_expiration').notNullable();
+    const instructorToAdd = { edipi, username, password: hash, email, first_name, middle_intial, last_name, date_of_birth, branch, rank, card_expiration };
+      fetch("http://localhost:8080", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(instructorToAdd)
+      })
+        .then(res => {
+          if(!res.ok) {
+            return res.json().then(errorData => {
+              throw new Error(errorData.message);
+            });
+          } else {
+          return res.json();
+          }
+        })
+        .then(data => {
+          console.log("Instructor Added", data);
+          alert("Instructor Added")
+        })
       // API CALL HERE
       //API push with username and password here to add to instructor DB
       //Probably error checking to see if username is already in DB?
@@ -23,6 +54,18 @@ function Login() {
   }
 
   function handleSubmit() {
+    if (!username || !password) {
+      alert("Please enter username and password");
+    }
+    fetch(`http://localhost:8080/${username}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Username not found");
+        } else {
+        return res.json();
+        }
+      })
+      .then(instructor => {
     // We need to check the username and password against the DB here
     // something like
     // is username in db
@@ -34,6 +77,11 @@ function Login() {
       } else {
         // hashedPassword needs to be an API call to DB for username's hashedpassword
         // API CALL HERE
+        fetch(`http://localhost:8080/${username}/${instructor.hashedPassword}`)
+         .then(res => {
+          if(!res.ok) {
+            throw new Error("Password incorrect");
+          } else {
         bcrypt.compare(password, hashedPassword, function (err, result) {
           if (err) {
             console.error("Error comparing passwords:", err);
@@ -47,7 +95,9 @@ function Login() {
     });
     return
   }
-
+    })
+      })
+    }
   return (
     <>
       <div className="login-header flex justify-self-center gap-50 text-align-center mt-25">
