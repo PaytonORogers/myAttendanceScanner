@@ -80,18 +80,16 @@ function Login() {
         <h1>Login:</h1>
         <input type="email" name="email" placeholder="Enter Email" onChange={e => setUsername(e.target.value)}></input>
         <input type="password" name="password" placeholder="Enter Password" onChange={e => setPassword(e.target.value)}></input>
-        <div className="grid grid-cols-1 content-center gap-1">
+        <div className="flex justify-center gap-6 mt-4">
           <button className="bg-white text-gray-700 border border-gray-300 
             rounded-md px-3 py-1 text-sm font-medium 
             shadow-sm hover:bg-gray-50 hover:border-gray-400 
-            active:bg-gray-100 transition-all 
-            ml-auto block place-self-start"
+            active:bg-gray-100 transition-all"
             onClick={() => handleSignUp()}>Sign Up</button>
           <button className="bg-white text-gray-700 border border-gray-300 
             rounded-md px-3 py-1 text-sm font-medium 
             shadow-sm hover:bg-gray-50 hover:border-gray-400 
-            active:bg-gray-100 transition-all 
-            ml-auto block place-self-end"
+            active:bg-gray-100 transition-all"
             onClick={() => handleSubmit()}>Submit</button>
         </div>
       </div>
