@@ -20,7 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/create" element={<ClassCreate />} />
-        <Route path="/instructor" element={<Instructor />} />
+        <Route path="/instructor/:id" element={<Instructor />} />
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/classes" element={<Classes />} />
         <Route path="/classes/:id" element={<ClassInfo />} />

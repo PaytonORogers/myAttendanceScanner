@@ -1,11 +1,43 @@
 import './Instructor.css';
 import { useEffect, useState } from 'react'
-
+import { useParams } from 'react-router-dom'
 
 function Instructor() {
   const [classes, setClasses] = useState([]);
+  const params = useParams();
 
+  useEffect(() => {
+    // setClasses to current inventory of atendeez (don't say it)
+    // loop through to make list for render on table of classes
+    
+  }, [])
 
+  function handleSubmit() {
+    // API call to create new atendeez (don't say it)
+    // use navToAttend
+    const classesToAdd = { 'classes': classes };
+    fetch("http://localhost:8080/classes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(classesToAdd)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("Failed to create class");
+      } 
+      return res.json();
+    })
+    .then(data => {
+      console.log("Class Added", data);
+      alert("Class added playboy");
+      navToAttend(data.id);
+    })
+  }
+
+  function navToAttend(classID) {
+    // routing to classID
+    Navigate("")
+  }
 
   return (
     <div className="flex flex-row h-screen">
@@ -47,6 +79,12 @@ function Instructor() {
           </li>
         </ul>
         <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" />
+        <button className="bg-white text-gray-700 border border-gray-300 
+            rounded-md px-3 py-1 text-sm font-medium 
+            shadow-sm hover:bg-gray-50 hover:border-gray-400 
+            active:bg-gray-100 transition-all 
+            ml-auto block mt-5"
+          onClick={() => handleSubmit()}> Submit </button>
       </div>
       <div className="flex flex-col border bg-white dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-25 mb-25 ml-5 mr-25 w-400 h-auto">
         <h1 className="font-bold">Previous Attendance Sheets</h1>
@@ -65,7 +103,6 @@ function Instructor() {
             </tr>
           </tbody>
         </table>
-        <button />
       </div>
     </div>
   )

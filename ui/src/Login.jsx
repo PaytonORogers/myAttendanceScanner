@@ -64,7 +64,7 @@ function Login() {
             if (!result) {
               alert("Incorrect Password!")
             } else {
-              //ADD ROUTING HERE
+              //ADD ROUTING HERE NEEDS TO SEND TO ROUTE WITH USERNAME IN URL
             }
           }
         });
@@ -78,20 +78,18 @@ function Login() {
       </div>
       <div className="login-page bg-white dark:bg-gray-800 gap-y-3 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-50">
         <h1>Login:</h1>
-        <input type="email" name="email" placeholder="Enter Email" onChange={e => setUsername(e.target.value)}></input>
-        <input type="password" name="password" placeholder="Enter Password" onChange={e => setPassword(e.target.value)}></input>
-        <div className="grid grid-cols-1 content-center gap-1">
-          <button className="bg-white text-gray-700 border border-gray-300 
-            rounded-md px-3 py-1 text-sm font-medium 
-            shadow-sm hover:bg-gray-50 hover:border-gray-400 
-            active:bg-gray-100 transition-all 
-            ml-auto block place-self-start"
+        <input className="border rounded-sm" type="email" name="email" placeholder=" Enter Email " onChange={e => setUsername(e.target.value)}></input>
+        <input className="border rounded-sm" type="password" name="password" placeholder=" Enter Password " onChange={e => setPassword(e.target.value)}></input>
+        <div className="flex justify-center gap-6 mt-4">
+          <button className="bg-white text-gray-700 border border-gray-300
+            rounded-md px-3 py-1 text-sm font-medium
+            shadow-sm hover:bg-gray-50 hover:border-gray-400
+            active:bg-gray-100 transition-all"
             onClick={() => handleSignUp()}>Sign Up</button>
-          <button className="bg-white text-gray-700 border border-gray-300 
-            rounded-md px-3 py-1 text-sm font-medium 
-            shadow-sm hover:bg-gray-50 hover:border-gray-400 
-            active:bg-gray-100 transition-all 
-            ml-auto block place-self-end"
+          <button className="bg-white text-gray-700 border border-gray-300
+            rounded-md px-3 py-1 text-sm font-medium
+            shadow-sm hover:bg-gray-50 hover:border-gray-400
+            active:bg-gray-100 transition-all"
             onClick={() => handleSubmit()}>Submit</button>
         </div>
       </div>
