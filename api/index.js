@@ -4,7 +4,9 @@ const app = express();
 const port = 8080;
 const cors = require("cors");
 
+
 app.use(cors());
+app.use(express.json());
 
 const knex = require("knex")(
   require("./knexfile.js")[process.env.NODE_ENV || "development"]
@@ -16,23 +18,23 @@ app.get('/', (req, res) => {
 })
 
 // Get all instructors
-app.get('/instructor_login', (req, res) => {
+app.get('/instructors', (req, res) => {
   knex
   .select('*')
   .from('instructor_login')
-  .then((data) => res.status(200).json(data))
-  .catch((err) => res.status(400).json(err))
+  .then((data) => res.status(200).send(data))
+  .catch((err) => res.status(400).send(err))
 });
 
 // Get a single instructor by dodid
-app.get('/instructor_login/:dodid', (req, res) => {
+app.get('/instructors/edipi/:dodid', (req, res) => {
   knex
   .select('*')
   .from('instructor_login')
-  .where(`instructor_login.edipi = ${req.params.dodid}`)
+  .where('instructor_login.edipi', '=', `${req.params.dodid}`)
   .then((instructor) => {
     if (instructor) {
-      res.status(200).send(instructor.json())
+      res.status(200).send(instructor)
     }
     else {
       res.status(404).send(`No instructor found with EDIPI of ${req.params.dodid}`)
@@ -40,7 +42,7 @@ app.get('/instructor_login/:dodid', (req, res) => {
   })
   .catch((err) => {
     if (err){
-      res.status(404).send('Something went wrong... YO')
+      res.status(404).send(err)
     }
   })
 })
@@ -50,7 +52,7 @@ app.get('/attendees', (req, res) => {
   knex
   .select('*')
   .from('attendees')
-  .then(attendees => res.status(200).send(attendees.json()))
+  .then(attendees => res.status(200).send(attendees))
   .catch(err => res.status(404).send(err))
 })
 
@@ -59,58 +61,125 @@ app.get('/attendees/:dodid', (req, res) => {
   knex
   .select('*')
   .from('attendees')
-  .where(`attendees.attendees_edipi = ${}`)
-  .then(attendees => res.status(200).send(attendees.json()))
+  .where('attendees.attendees_edipi', '=', `${req.params.dodid}`)
+  .then(attendees => res.status(200).send(attendees))
   .catch(err => res.status(404).send(err))
 })
 
 // Get all classes
-app.get('/classes', () => {
+app.get('/classes', (req, res) => {
   knex
   .select('*')
   .from('classes')
-  .then(classes => res.status(200).send(classes.json()))
+  .then(classes => res.status(200).send(classes))
   .catch(err => res.status(404).send(err))
 })
 
-// Get a all classes per dodid of attendee
-app.get('/classes/:dodid'){
+app.get('/classes/:id', (req, res) => {
   knex
   .select('*')
   .from('classes')
-  .join('classes_attendees', 'classes_attendees.class_id = classes.class_id')
-  .join('attendees', 'classes attendees.attendee_edipi = attendees.attendees_edipi')
-  .where(`attendees.attendees_edipi = ${req.params.dodid}`)
-  .then((attendee) => {
-    if (attendee){
-      res.status(200).send(attendee.json())
-    }
-    else {
-      res.status(404).send(`No classes attended by attendee or no attendee with dodid of ${req.params.dodid}`)
-    }
-  })
+  .where('class_id', '=', `${req.params.id}`)
+  .then(classes => res.status(200).send(classes))
   .catch(err => res.status(404).send(err))
-}
+})
+
+
+app.get('/instructors/username/:username', (req, res) => {
+  let queriedUsername = req.params.username
+  console.log(queriedUsername)
+  if (queriedUsername){
+    knex
+    .select('*')
+    .from('instructor_login')
+    .where('instructor_login.username', '=', `${queriedUsername}`)
+    .then((info) => res.status(200).send(info))
+  }
+  else{
+    res.status(400).send('You must supply a username in the body of the request')
+  }
+})
+
+// Must send with body of full instructor object. Example:
+// {
+//     "edipi": 53241,
+//     "username": "hurlingkirbiez69",
+//     "hashed_password": "password2",
+//     "email": "kirby@mail.com",
+//     "first_name": "bill",
+//     "middle_initial": "f",
+//     "last_name": "kirby",
+//     "date_of_birth": "1990-09-16",
+//     "branch": "ARRRRRMMMY",
+//     "rank": "E6",
+//     "card_expiration": "20260101"
+// }
+app.post('/instructor_login', (req, res) => {
+  let addedInstructor = req.body
+  console.log(addedInstructor)
+  if ( addedInstructor &&
+    Object.hasOwn(req.body, 'edipi') &&
+    Object.hasOwn(req.body, 'username') &&
+    Object.hasOwn(req.body, 'hashed_password') &&
+    Object.hasOwn(req.body, 'email') &&
+    Object.hasOwn(req.body, 'first_name') &&
+    Object.hasOwn(req.body, 'middle_initial') &&
+    Object.hasOwn(req.body, 'last_name') &&
+    Object.hasOwn(req.body, 'date_of_birth') &&
+    Object.hasOwn(req.body, 'branch') &&
+    Object.hasOwn(req.body, 'rank') &&
+    Object.hasOwn(req.body, 'card_expiration')
+  )
+
+  {
+    knex('instructor_login')
+    .insert(addedInstructor, ['edipi', 'rank', 'first_name', 'last_name'])
+    .then((info) => res.status(200).send(info))
+  }
+  else{
+    res.status(400).send('Missing required properties')
+  }
+})
+
+// Get a all classes per dodid of attendee
+// app.get('/classes/:dodid', (req, res) => {
+//   knex
+//   .select('*')
+//   .from('classes')
+//   .join('classes_attendees', 'classes_attendees.class_id', '=', 'classes.class_id')
+//   .join('attendees', 'classes_attendees.attendees_edipi', '=', 'attendees.attendees_edipi')
+//   .where('attendees.attendees_edipi', '=', `${req.params.dodid}`)
+//   .then((attendee) => {
+//     if (attendee){
+//       res.status(200).send(attendee)
+//     }
+//     else {
+//       res.status(404).send(`No classes attended by attendee or no attendee with dodid of ${req.params.dodid}`)
+//     }
+//   })
+//   .catch(err => res.status(404).send(`test ${err}`))
+// })
 
 // TODO - THIS WAS COPYPASTAD FROM ABOVE
 // Get all attendees of class by class id
-app.get('/attendee/:dodid/classes'){
-  knex
-  .select('*')
-  .from('classes')
-  .join('classes_attendees', 'classes_attendees.class_id = classes.class_id')
-  .join('attendees', 'classes attendees.attendee_edipi = attendees.attendees_edipi')
-  .where(`attendees.attendees_edipi = ${req.params.dodid}`)
-  .then((attendee) => {
-    if (attendee){
-      res.status(200).send(attendee.json())
-    }
-    else {
-      res.status(404).send(`No classes attended by attendee or no attendee with dodid of ${req.params.dodid}`)
-    }
-  })
-  .catch(err => res.status(404).send(err))
-}
+// app.get('/attendee/:dodid/classes', (req, res) => {
+//   knex
+//   .select('*')
+//   .from('classes')
+//   .join('classes_attendees', 'classes_attendees.class_id', '=', 'classes.class_id')
+//   .join('attendees', 'classes attendees.attendee_edipi', '=', attendees.attendees_edipi)
+//   .where('attendees.attendees_edipi', '=', req.params.dodid)
+//   .then((attendee) => {
+//     if (attendee){
+//       res.status(200).send(attendee.)
+//     }
+//     else {
+//       res.status(404).send(`No classes attended by attendee or no attendee with dodid of ${req.params.dodid}`)
+//     }
+//   })
+//   .catch(err => res.status(404).send(err))
+// })
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });

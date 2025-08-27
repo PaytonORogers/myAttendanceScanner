@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
     return knex.schema.createTable('classes_attendees', table => {
-        table.integer('attendees_edipi').references('attendees.attendees_edipi').notNullable();
+        table.string('attendees_edipi').references('attendees.attendees_edipi').notNullable();
         table.integer('class_id').references('classes.class_id').notNullable();
     })
 };

@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
+exports.up = function (knex) {
     return knex.schema.createTable('classes', table => {
         table.increments('class_id').primary().notNullable();
         table.string('class_title').notNullable();
@@ -15,10 +15,9 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async function(knex) {
-    await knex.schema.alterTable('classes', table => { console.log('drop foreign shit')
+exports.down = async function (knex) {
+    await knex.schema.alterTable('classes', table => {
         table.dropForeign('instructor_edipi')
     })
-    console.log('dropping table classes')
     await knex.schema.dropTableIfExists('classes');
 };
