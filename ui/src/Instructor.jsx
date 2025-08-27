@@ -1,37 +1,46 @@
 import './Instructor.css';
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { AppContext } from './App.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function Instructor() {
+  const { username, setUsername, isLoggedIn, setIsLoggedIn } = useContext(AppContext)
   const [classes, setClasses] = useState([]);
-  const params = useParams();
+  const [newClassName, setNewClassName] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const tempClasses = [];
+    fetch("http://localhost:8080/classes/:username" + "")
+  }, [])
 
   useEffect(() => {
     // setClasses to current inventory of atendeez (don't say it)
     // loop through to make list for render on table of classes
-    
-  }, [])
+    console.log(newClassName)
+  }, [newClassName])
 
   function handleSubmit() {
     // API call to create new atendeez (don't say it)
     // use navToAttend
-    const classesToAdd = { 'classes': classes };
-    fetch("http://localhost:8080/classes", {
+    const classesToAdd = { 'newClassName': newClassName };
+    fetch("http://localhost:8080/newClassName", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(classesToAdd)
     })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Failed to create class");
-      } 
-      return res.json();
-    })
-    .then(data => {
-      console.log("Class Added", data);
-      alert("Class added playboy");
-      navToAttend(data.id);
-    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Failed to create class");
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("Class Added", data);
+        alert("Class added playboy");
+        navToAttend(newClassName);
+      })
   }
 
   function navToAttend(classID) {
@@ -45,7 +54,7 @@ function Instructor() {
         <h1 className="font-bold">Create new Attendance Sheet</h1>
         <br></br>
         <p>CAC Scan Enabled</p>
-        <ul>
+        {/* <ul>
           <li>
             <input type="checkbox" name="EDIPI" value="EDIPI" /> EDIPI
           </li>
@@ -70,7 +79,7 @@ function Instructor() {
           <li>
             <input type="checkbox" name="Branch Code" value="Branch Code" /> Branch Code
           </li>
-        </ul>
+        </ul> */}
         <br></br>
         <p>Manual Entry</p>
         <ul>
@@ -78,7 +87,7 @@ function Instructor() {
             <input type="checkbox" name="Email" value="Email" /> Email
           </li>
         </ul>
-        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" />
+        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" onChange={e => setNewClassName(e.target.value)} />
         <button className="bg-white text-gray-700 border border-gray-300 
             rounded-md px-3 py-1 text-sm font-medium 
             shadow-sm hover:bg-gray-50 hover:border-gray-400 
@@ -94,12 +103,14 @@ function Instructor() {
             <tr>
               <th scope="colu">Previous Courses</th>
               <th scope="col">Class Attendance</th>
+              <th scope="col">Date Added</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="hover:bg-violet-600 text-center border">
+            <tr className="hover:bg-violet-600 text-center border" onClick={() => navigate('/attendance/1')}>
               <td scope="rows" className="border">TCCC</td>
               <td scope="row" className="border">17/20</td>
+              <td scope="row" className="border">17 July 2024</td>
             </tr>
           </tbody>
         </table>
