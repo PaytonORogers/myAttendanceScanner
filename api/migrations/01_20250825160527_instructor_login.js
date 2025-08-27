@@ -7,14 +7,14 @@ exports.up = function (knex) {
         // table.integer('edipi').primary().notNullable();
         table.string('username').primary().notNullable();
         table.string('hashed_password').notNullable();
-        // table.string('email').notNullable();
-        // table.string('first_name').notNullable();
-        // table.string('middle_initial').notNullable();
-        // table.string('last_name').notNullable();
-        // table.string('date_of_birth').notNullable();
-        // table.string('branch').notNullable();
-        // table.string('rank').notNullable();
-        // table.string('card_expiration').notNullable();
+    //     table.string('email').notNullable();
+    //     table.string('first_name').notNullable();
+    //     table.string('middle_initial').notNullable();
+    //     table.string('last_name').notNullable();
+    //     table.string('date_of_birth').notNullable();
+    //     table.string('branch').notNullable();
+    //     table.string('rank').notNullable();
+    //     table.string('card_expiration').notNullable();
     });
 };
 
