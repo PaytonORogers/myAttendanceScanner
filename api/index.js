@@ -116,12 +116,12 @@ app.get('/instructors/username/:username', (req, res) => {
 // }
 app.post('/instructor_login', async (req, res) => {
   let addedInstructor = req.body
-  
+
 
 
 
   const existingUser = await knex.select('*').from('instructor_login').where('username', '=', addedInstructor.username);
-console.log(existingUser)
+  console.log(existingUser)
 
   if (addedInstructor && Object.hasOwn(addedInstructor, 'username') && Object.hasOwn(addedInstructor, 'hashed_password')) {
     // ADD CHECK FOR IF INSTRUCTOR ALREADY HAS LOGIN

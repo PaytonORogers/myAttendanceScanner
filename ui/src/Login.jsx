@@ -1,11 +1,17 @@
 import './Login.css'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import bcrypt from "bcryptjs";
+import { AppContext } from './App.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [username, setUsername] = useState("")
+  const { username, setUsername, isLoggedIn, setIsLoggedIn } = useContext(AppContext)
   const [password, setPassword] = useState("")
   const [hashedPassword, setHashedPassword] = useState("")
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log()
+  }, [])
 
   function handleSignUp() {
     bcrypt.hash(password, 12, function (err, hash) {
@@ -56,7 +62,7 @@ function Login() {
       .then(instructor => {
         console.log(instructor)
         // hashedPassword needs to be an API call to DB for username's hashedpassword
-        bcrypt.compare(password, hashedPassword, function (err, result) {
+        bcrypt.compare(password, instructor[0].hashed_password, function (err, result) {
           if (err) {
             console.error("Error comparing passwords:", err);
           } else {
@@ -64,7 +70,8 @@ function Login() {
             if (!result) {
               alert("Incorrect Password!")
             } else {
-              //ADD ROUTING HERE NEEDS TO SEND TO ROUTE WITH USERNAME IN URL
+              setIsLoggedIn(true)
+              navigate("/instructor")
             }
           }
         });

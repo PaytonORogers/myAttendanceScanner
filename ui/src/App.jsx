@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, createContext, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import './App.css'
@@ -10,23 +10,22 @@ import Classes from './Classes.jsx'
 import ClassCreate from './ClassCreate.jsx'
 import ClassInfo from './ClassInfo.jsx'
 
-
-
+export const AppContext = createContext(null);
 
 function App() {
+  const [username, setUsername] = useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/create" element={<ClassCreate />} />
-        <Route path="/instructor/:id" element={<Instructor />} />
-        <Route path="/attendance" element={<Attendance />} />
-        <Route path="/classes" element={<Classes />} />
-        <Route path="/classes/:id" element={<ClassInfo />} />
-
-
-      </Routes>
+      <AppContext value={{ username, setUsername, isLoggedIn, setIsLoggedIn }}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/instructor" element={<Instructor />} />
+          <Route path="/attendance/:id" element={<Attendance />} />
+        </Routes>
+      </AppContext>
     </>
   )
 }
