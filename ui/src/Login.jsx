@@ -9,7 +9,7 @@ function Login() {
   const [password, setPassword] = useState("")
   const [hashedPassword, setHashedPassword] = useState("")
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     console.log(username)
   }, [username])
@@ -85,12 +85,14 @@ function Login() {
       <div className="login-header flex justify-self-center gap-50 text-align-center mt-25">
         <h2>myAttendanceScanner</h2>
       </div>
-          <div className="absolute inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]" />
+      <div className="absolute inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]" />
 
       <div className="login-page bg-white dark:bg-gray-800 gap-y-3 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-50">
         <h1>Login:</h1>
         <input className="border rounded-sm" type="email" name="email" placeholder=" Enter Email " onChange={e => setUsername(e.target.value)}></input>
-        <input className="border rounded-sm" type="password" name="password" placeholder=" Enter Password " onChange={e => setPassword(e.target.value)}></input>
+        <input className="border rounded-sm" type="password" name="password" placeholder=" Enter Password " onChange={e => setPassword(e.target.value)} onKeyUp={e => {
+          if (e.key === 'Enter') handleSubmit()
+        }}></input>
         <div className="flex justify-center gap-6 mt-4">
           <button className="bg-white text-gray-700 border border-gray-300
             rounded-md px-3 py-1 text-sm font-medium
@@ -104,7 +106,6 @@ function Login() {
             onClick={() => handleSubmit()}>Submit</button>
         </div>
       </div>
-      
     </>
   )
 }

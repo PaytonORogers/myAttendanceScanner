@@ -99,7 +99,9 @@ function Instructor() {
         </ul>
             <div className="absolute inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]" />
 
-        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" onChange={e => setNewClassName(e.target.value)} />
+        <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" onChange={e => setNewClassName(e.target.value)} onKeyUp={e => {
+          if (e.key === 'Enter') handleSubmit()
+        }}/>
         <button className="bg-white text-gray-700 border border-gray-300 
             rounded-md px-3 py-1 text-sm font-medium 
             shadow-sm hover:bg-gray-50 hover:border-gray-400 
