@@ -11,8 +11,16 @@ function Instructor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const tempClasses = [];
-    fetch("http://localhost:8080/classes/:username" + "")
+    fetch("http://localhost:8080/classes/instructor/" + username)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch attendance sheets");
+        }
+        return res.json();
+      })
+      .then(data => {
+        setClasses(data)
+      })
   }, [])
 
   useEffect(() => {
@@ -24,8 +32,10 @@ function Instructor() {
   function handleSubmit() {
     // API call to create new atendeez (don't say it)
     // use navToAttend
-    const classesToAdd = { 'newClassName': newClassName };
-    fetch("http://localhost:8080/newClassName", {
+    console.log(newClassName)
+    console.log(username)
+    const classesToAdd = { 'class_title': newClassName, 'instructor_username': username };
+    fetch("http://localhost:8080/classes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(classesToAdd)
@@ -45,7 +55,7 @@ function Instructor() {
 
   function navToAttend(classID) {
     // routing to classID
-    Navigate("")
+    navigate("/attendance/" + classID)
   }
 
   return (
@@ -107,11 +117,13 @@ function Instructor() {
             </tr>
           </thead>
           <tbody>
-            <tr className="hover:bg-violet-600 text-center border" onClick={() => navigate('/attendance/1')}>
-              <td scope="rows" className="border">TCCC</td>
-              <td scope="row" className="border">17/20</td>
-              <td scope="row" className="border">17 July 2024</td>
-            </tr>
+            {classes.map((sheet, index) => (
+              <tr key={sheet.id} onClick={() => {navToAttend(sheet.id)}} className="border hover:bg-violet-600 text-center">
+                <td className="border px-2 py-1">{sheet.class_title}</td>
+                <td className="border px-2 py-1">{sheet.instructor_username}</td>
+                <td className="border px-2 py-1">{sheet.date}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

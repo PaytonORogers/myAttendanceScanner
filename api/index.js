@@ -84,6 +84,22 @@ app.get('/classes/:id', (req, res) => {
     .catch(err => res.status(404).send(err))
 })
 
+app.get('/classes/attendees/:class_id', (req, res) => {
+  knex
+  .select('*')
+  .from('classes_attendees')
+  .where('classes_attendees.attendees_edipi', req.params.class_id)
+  .join('attendees', 'classes_attendees.attendees_edipi', '=', 'attendees.attendees_edipi')
+  .then((data) => {
+    if (data.length === 0){
+      res.status(404).send(`Nothing found for ${req.params.class}`)
+    }
+    else{
+      res.status(200).send(data)
+    }
+  })
+})
+
 app.get('/classes/instructor/:instructor_username', (req, res) => {
   knex
   .select('*')
@@ -94,7 +110,7 @@ app.get('/classes/instructor/:instructor_username', (req, res) => {
     if (data.length === 0){
       res.status(404).send(`No classes found for ${req.params.instructor_username}`)
     }
-    else{
+    else {
       res.status(200).send(data)
     }
   })

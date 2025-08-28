@@ -1,16 +1,18 @@
 import './Attendance.css';
 import { useContext, useEffect, useState } from "react"
 import { AppContext } from './App.jsx'
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function Attendance() {
   const { username, setUsername, isLoggedIn, setIsLoggedIn } = useContext(AppContext)
   const [attendees, setAttendees] = useState([])
   const navigate = useNavigate()
+  const params = useParams()
+
   useEffect(() => {
-    fetch("http://localhost:8080/classes:id")
+    fetch("http://localhost:8080/classes/attendees/" + params.id)
       .then(res => {
-        if (!res.ok) throw new Error("Fail Fail Fail");
+        if (!res.ok) throw new Error("Failed Again Playboy");
         return res.json();
       })
       .then(data => {
@@ -77,17 +79,17 @@ function Attendance() {
       <table className="border w-2/3 mx-auto mt-10">
         <thead>
           <tr>
-            <th className="border px-2 py-1">Names</th>
-            <th className="border px-2 py-1">Attendance</th>
+            <th className="border px-2 py-1">Course Title</th>
+            <th className="border px-2 py-1">Attendees</th>
             <th className="border px-2 py-1">Date Added</th>
           </tr>
         </thead>
         <tbody>
-          {attendees.map((course, index) => (
-            <tr key={course.id} className="border">
-              <td className="border px-2 py-1">{course.names}</td>
-              <td className="border px-2 py-1">{course.attendance}</td>
-              <td className="border px-2 py-1">{course.date}</td>
+          {attendees.map((attendee, index) => (
+            <tr key={attendee.id} className="border">
+              <td className="border px-2 py-1">{attendee.class_title}</td>
+              <td className="border px-2 py-1">{attendee.instructor_username}</td>
+              <td className="border px-2 py-1">{attendee.date}</td>
             </tr>
           ))}
         </tbody>
