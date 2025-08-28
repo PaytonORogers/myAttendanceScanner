@@ -75,6 +75,21 @@ app.get('/classes', (req, res) => {
     .catch(err => res.status(404).send(err))
 })
 
+app.get('/classes/:class_title', (req, res) => {
+  knex
+  .select('*')
+  .from('classes')
+  .where('class_title', req.params.class_title)
+  .then((data) => {
+    if (data.length === 0){
+      res.status(404).send(`No class ${req.params.class_title} found`)
+    }
+    else{
+      res.status(200).send(data)
+    }
+  })
+})
+
 app.get('/classes/:id', (req, res) => {
   knex
     .select('*')
