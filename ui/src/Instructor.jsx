@@ -97,6 +97,8 @@ function Instructor() {
             <input type="checkbox" name="Email" value="Email" /> Email
           </li>
         </ul>
+            <div className="absolute inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]" />
+
         <input className="bg-white rounded-lg shadow-xl text-black" type="text" name="course-input-name" placeholder="Course Name" onChange={e => setNewClassName(e.target.value)} />
         <button className="bg-white text-gray-700 border border-gray-300 
             rounded-md px-3 py-1 text-sm font-medium 
@@ -118,7 +120,7 @@ function Instructor() {
           </thead>
           <tbody>
             {classes.map((sheet, index) => (
-              <tr key={sheet.id} onClick={() => {navToAttend(sheet.id)}} className="border hover:bg-violet-600 text-center">
+              <tr key={sheet.id} onClick={() => {navToAttend(sheet.class_id)}} className="border hover:bg-violet-600 text-center">
                 <td className="border px-2 py-1">{sheet.class_title}</td>
                 <td className="border px-2 py-1">{sheet.instructor_username}</td>
                 <td className="border px-2 py-1">{sheet.date}</td>

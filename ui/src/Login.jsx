@@ -85,6 +85,8 @@ function Login() {
       <div className="login-header flex justify-self-center gap-50 text-align-center mt-25">
         <h2>myAttendanceScanner</h2>
       </div>
+          <div className="absolute inset-0 -z-10 h-full w-full [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]" />
+
       <div className="login-page bg-white dark:bg-gray-800 gap-y-3 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-50">
         <h1>Login:</h1>
         <input className="border rounded-sm" type="email" name="email" placeholder=" Enter Email " onChange={e => setUsername(e.target.value)}></input>
@@ -102,8 +104,12 @@ function Login() {
             onClick={() => handleSubmit()}>Submit</button>
         </div>
       </div>
+      
     </>
   )
 }
 
 export default Login
+
+//"absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
+//      <div className="login-page bg-white dark:bg-gray-800 gap-y-3 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 mt-50">

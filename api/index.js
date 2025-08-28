@@ -103,11 +103,11 @@ app.get('/classes/attendees/:class_id', (req, res) => {
   knex
   .select('*')
   .from('classes_attendees')
-  .where('classes_attendees.attendees_edipi', req.params.class_id)
+  .where('classes_attendees.class_id', '=', `${req.params.class_id}`)
   .join('attendees', 'classes_attendees.attendees_edipi', '=', 'attendees.attendees_edipi')
   .then((data) => {
     if (data.length === 0){
-      res.status(404).send(`Nothing found for ${req.params.class}`)
+      res.status(404).send(`Nothing found for ${req.params.class_id}`)
     }
     else{
       res.status(200).send(data)
