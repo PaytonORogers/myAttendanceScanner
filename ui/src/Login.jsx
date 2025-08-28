@@ -9,9 +9,10 @@ function Login() {
   const [password, setPassword] = useState("")
   const [hashedPassword, setHashedPassword] = useState("")
   const navigate = useNavigate();
+  
   useEffect(() => {
-    console.log()
-  }, [])
+    console.log(username)
+  }, [username])
 
   function handleSignUp() {
     bcrypt.hash(password, 12, function (err, hash) {
@@ -19,6 +20,7 @@ function Login() {
         console.log(err)
       } else {
         setHashedPassword(hash)
+        console.log(hash)
       }
       const instructorToAdd = { 'username': username, 'hashed_password': hash };
       fetch("http://localhost:8080/instructor_login", {

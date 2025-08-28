@@ -129,7 +129,7 @@ app.get('/instructors/username/:username', (req, res) => {
     knex
       .select('*')
       .from('instructor_login')
-      .where('instructor_login.username', '=', `${queriedUsername}`)
+      .where('username', '=', `${queriedUsername}`)
       .then((info) => res.status(200).send(info))
   }
   else {
